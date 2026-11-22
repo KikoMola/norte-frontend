@@ -1,59 +1,35 @@
-# NorteFront
+# Norte · frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.0.
+CRM + ERP open source para pymes españolas. Este repositorio contiene el frontend; el backend (Spring Boot + BFF)
+vive en [norte-backend](https://github.com/KikoMola/norte-backend).
 
-## Development server
+Angular 22 (standalone, zoneless, signals), Tailwind 4, Angular Primitives, ng-icons (Lucide), TanStack Table y
+Charts, y ngx-translate.
 
-To start a local development server, run:
+## Arrancar en local
 
-```bash
-ng serve
-```
+1. Levanta el backend siguiendo su README (`docker compose up -d`, `app` y `bff`).
+2. Instala y arranca el frontend:
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+   ```bash
+   npm install
+   npm start
+   ```
 
-## Code scaffolding
+3. Abre http://localhost:4200 y entra con `ana` / `ana` o `bruno` / `bruno`.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+El servidor de desarrollo reenvía `/api`, `/oauth2`, `/login/oauth2` y `/logout` al BFF en `localhost:8080`
+(ver `proxy.conf.json`), así que el navegador lo ve todo en el mismo origen y la cookie de sesión funciona sin CORS.
 
-```bash
-ng generate component component-name
-```
+## Autenticación
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+El frontend no maneja tokens. La sesión es una cookie `HttpOnly` del BFF y `HttpClient` envía el token CSRF
+(`XSRF-TOKEN` → `X-XSRF-TOKEN`) automáticamente. Ver `src/app/core/auth/session.ts`.
 
-```bash
-ng generate --help
-```
+## Scripts
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+| Comando | Qué hace |
+| --- | --- |
+| `npm start` | Servidor de desarrollo con proxy al BFF |
+| `npm run build` | Build de producción en `dist/` |
+| `npm test` | Tests unitarios con Vitest |
