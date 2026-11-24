@@ -4,6 +4,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
 import { type Me, SessionService } from '../../api';
+import { handles } from '../http/http-context';
 
 export type SessionStatus = 'loading' | 'authenticated' | 'anonymous' | 'error';
 
@@ -41,7 +42,7 @@ export class Session {
 
   async load(): Promise<void> {
     try {
-      const user = await firstValueFrom(this.api.getMe());
+      const user = await firstValueFrom(this.api.getMe({ context: handles(401) }));
       this.state.set({ status: 'authenticated', user });
     } catch (error) {
       const anonymous = error instanceof HttpErrorResponse && error.status === 401;

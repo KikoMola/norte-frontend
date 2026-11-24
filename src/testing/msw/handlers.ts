@@ -9,7 +9,7 @@ const TRACE_ID = '00000000000000000000000000000000';
 
 function problem(status: number, code: string, title: string, extra: Partial<Problem> = {}) {
   const body: Problem = {
-    type: `https://norte.dev/problems/${code}`,
+    type: `https://norte.dev/problems/${code.replace(/[._]/g, '-')}`,
     title,
     status,
     code,
@@ -22,24 +22,40 @@ function problem(status: number, code: string, title: string, extra: Partial<Pro
   });
 }
 
-/** Cursor opaco: el desplazamiento en base64. Suficiente para el mock; el backend usa keyset. */
-const encodeCursor = (offset: number) => btoa(String(offset));
-const decodeCursor = (cursor: string | null) => (cursor ? Number(atob(cursor)) || 0 : 0);
+/**
+ * Cursor opaco: desplazamiento y ordenación en base64. Como en el backend, un cursor usado con otra ordenación es un
+ * 400 `request.invalid_parameter`.
+ */
+const encodeCursor = (offset: number, sort: string) => btoa(JSON.stringify({ offset, sort }));
+function decodeCursor(cursor: string, sort: string): number | null {
+  try {
+    const decoded = JSON.parse(atob(cursor)) as { offset: number; sort: string };
+    return decoded.sort === sort && Number.isInteger(decoded.offset) ? decoded.offset : null;
+  } catch {
+    return null;
+  }
+}
 
 export const handlers = [
   http.get(`${API}/me`, () =>
-    db.me ? HttpResponse.json(db.me) : problem(401, 'unauthorized', 'Necesitas iniciar sesión'),
+    db.me
+      ? HttpResponse.json(db.me)
+      : problem(401, 'auth.unauthenticated', 'Necesitas iniciar sesión'),
   ),
 
   http.get(`${API}/companies`, ({ request }) => {
     if (!db.me) {
-      return problem(401, 'unauthorized', 'Necesitas iniciar sesión');
+      return problem(401, 'auth.unauthenticated', 'Necesitas iniciar sesión');
     }
     const url = new URL(request.url);
     const q = url.searchParams.get('q')?.trim().toLowerCase();
     const sort = url.searchParams.get('sort') ?? 'name';
     const limit = Math.min(Math.max(Number(url.searchParams.get('limit') ?? 25), 1), 100);
-    const offset = decodeCursor(url.searchParams.get('cursor'));
+    const cursor = url.searchParams.get('cursor');
+    const offset = cursor ? decodeCursor(cursor, sort) : 0;
+    if (offset === null) {
+      return problem(400, 'request.invalid_parameter', 'El cursor no es válido');
+    }
 
     const field = sort.replace('-', '') as 'name' | 'createdAt';
     const direction = sort.startsWith('-') ? -1 : 1;
@@ -51,14 +67,15 @@ export const handlers = [
     const hasNext = offset + limit < filtered.length;
     const page: CompanyPage = {
       items,
-      pageInfo: { hasNext, nextCursor: hasNext ? encodeCursor(offset + limit) : null },
+      // Como el backend real: en la última página nextCursor no llega (ni siquiera como null).
+      pageInfo: hasNext ? { hasNext, nextCursor: encodeCursor(offset + limit, sort) } : { hasNext },
     };
     return HttpResponse.json(page);
   }),
 
   http.post<never, CompanyCreate>(`${API}/companies`, async ({ request }) => {
     if (!db.me) {
-      return problem(401, 'unauthorized', 'Necesitas iniciar sesión');
+      return problem(401, 'auth.unauthenticated', 'Necesitas iniciar sesión');
     }
     const body = await request.json();
     const name = body.name?.trim() ?? '';
@@ -94,7 +111,7 @@ export const handlers = [
     const found = db.companies.find((c) => c.id === params['companyId']);
     return found
       ? HttpResponse.json(found, { headers: { ETag: '"0"' } })
-      : problem(404, 'not_found', 'No existe');
+      : problem(404, 'company.not_found', 'La empresa no existe');
   }),
 
   // Cierre de sesión del BFF: 202 con la URL a la que navegar.
