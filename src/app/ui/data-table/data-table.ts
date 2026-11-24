@@ -121,7 +121,7 @@ const features = tableFeatures({});
                 </caption>
               }
               <thead>
-                @for (group of table.getHeaderGroups(); track group.id) {
+                @for (group of headerGroups(); track group.id) {
                   <tr>
                     @for (header of group.headers; track header.id) {
                       @let column = columnById().get(header.column.id)!;
@@ -159,7 +159,7 @@ const features = tableFeatures({});
                 }
               </thead>
               <tbody>
-                @for (row of table.getRowModel().rows; track row.id) {
+                @for (row of bodyRows(); track row.id) {
                   <tr class="hover:[&>td]:bg-surface-2">
                     @for (cell of row.getAllCells(); track cell.id) {
                       @let column = columnById().get(cell.column.id)!;
@@ -255,9 +255,19 @@ export class DataTable<T extends RowData> {
   protected readonly table = injectTable(() => ({
     features,
     columns: this.tableColumns(),
-    data: this.rows(),
+    // Defensa ante entradas aún sin valor (Storybook asigna los args tras el primer render).
+    data: this.rows() ?? [],
     getRowId: (row: T) => this.rowId()(row),
   }));
+
+  /** El row model puede no existir aún en el primer render (Storybook); se trata como tabla vacía. */
+  protected bodyRows() {
+    return this.table.getRowModel()?.rows ?? [];
+  }
+
+  protected headerGroups() {
+    return this.table.getHeaderGroups() ?? [];
+  }
 
   protected templateFor(columnId: string): TemplateRef<{ $implicit: T }> | null {
     return (
