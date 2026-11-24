@@ -24,7 +24,10 @@ export class Session {
   private readonly http = inject(HttpClient);
   private readonly document = inject(DOCUMENT);
 
-  private readonly state = signal<{ status: SessionStatus; user: Me | null }>({ status: 'loading', user: null });
+  private readonly state = signal<{ status: SessionStatus; user: Me | null }>({
+    status: 'loading',
+    user: null,
+  });
 
   readonly status = computed(() => this.state().status);
   readonly user = computed(() => this.state().user);

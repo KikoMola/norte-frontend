@@ -11,7 +11,9 @@ describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [{ provide: Session, useValue: { status, user, login: () => {}, logout: async () => {} } }],
+      providers: [
+        { provide: Session, useValue: { status, user, login: vi.fn(), logout: vi.fn() } },
+      ],
     }).compileComponents();
   });
 
@@ -19,12 +21,21 @@ describe('App', () => {
     status.set('anonymous');
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
-    expect((fixture.nativeElement as HTMLElement).querySelector('button')?.textContent).toContain('Iniciar sesión');
+    expect((fixture.nativeElement as HTMLElement).querySelector('button')?.textContent).toContain(
+      'Iniciar sesión',
+    );
   });
 
   it('shows the tenant of the current user', async () => {
     status.set('authenticated');
-    user.set({ id: '1', username: 'ana', name: 'Ana Acme', email: 'ana@acme.test', tenantId: 't-1', roles: ['admin'] });
+    user.set({
+      id: '1',
+      username: 'ana',
+      name: 'Ana Acme',
+      email: 'ana@acme.test',
+      tenantId: 't-1',
+      roles: ['admin'],
+    });
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     expect((fixture.nativeElement as HTMLElement).textContent).toContain('t-1');

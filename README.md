@@ -28,8 +28,8 @@ El frontend no maneja tokens. La sesión es una cookie `HttpOnly` del BFF y `Htt
 
 ## Scripts
 
-| Comando | Qué hace |
-| --- | --- |
-| `npm start` | Servidor de desarrollo con proxy al BFF |
-| `npm run build` | Build de producción en `dist/` |
-| `npm test` | Tests unitarios con Vitest |
+| Comando         | Qué hace                                |
+| --------------- | --------------------------------------- |
+| `npm start`     | Servidor de desarrollo con proxy al BFF |
+| `npm run build` | Build de producción en `dist/`          |
+| `npm test`      | Tests unitarios con Vitest              |

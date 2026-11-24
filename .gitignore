@@ -42,3 +42,13 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Playwright
+/playwright-report
+/test-results
+/blob-report
+/playwright/.cache
+
+# Storybook
+/storybook-static
+*storybook.log
