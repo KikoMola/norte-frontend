@@ -1,0 +1,14 @@
+node_modules
+dist
+.angular
+storybook-static
+playwright-report
+test-results
+coverage
+src/app/api/generated
+.git
+.github
+.vscode
+.claude
+e2e
+*.log

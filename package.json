@@ -80,7 +80,7 @@
   },
   "engines": {
     "node": ">=22.22.3 <23 || >=24.15.0",
-    "npm": ">=11"
+    "npm": ">=10.9"
   },
   "overrides": {
     "@storybook/builder-webpack5": {
