@@ -53,7 +53,7 @@ test('hito 0: alta de empresa con sesión real y aislamiento entre tenants', asy
   await expectNoAxeViolations(ana);
   await ana.getByRole('button', { name: 'Guardar empresa' }).click();
   await expect(ana).toHaveURL(/\/empresas$/);
-  await expect(ana.getByText(name)).toBeVisible();
+  await expect(ana.getByText(name, { exact: true })).toBeVisible();
   await expectNoAxeViolations(ana);
 
   // El mismo NIF en el mismo tenant: 409 traducido en un aviso.
@@ -67,7 +67,7 @@ test('hito 0: alta de empresa con sesión real y aislamiento entre tenants', asy
   const bruno = await signIn(browser, 'bruno');
   await bruno.goto('/empresas');
   await expect(bruno.getByRole('heading', { name: 'Empresas', exact: true })).toBeVisible();
-  await expect(bruno.getByText(name)).toHaveCount(0);
+  await expect(bruno.getByText(name, { exact: true })).toHaveCount(0);
 
   // Cerrar sesión vuelve a pedir inicio de sesión.
   await ana.goto('/empresas');

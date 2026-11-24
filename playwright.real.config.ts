@@ -11,6 +11,8 @@ export default defineConfig({
   workers: 1,
   reporter: 'list',
   timeout: 90_000,
+  // El primer arranque de `npm start` compila en frío: margen para la primera pantalla.
+  expect: { timeout: 15_000 },
   use: {
     baseURL: 'http://localhost:4200',
     locale: 'es-ES',
