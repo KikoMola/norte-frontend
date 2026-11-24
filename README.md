@@ -39,6 +39,7 @@ Con [just](https://github.com/casey/just) (opcional; cada receta es un comando n
 | `just test`           | Tests unitarios (Vitest + MSW)                                                         |
 | `just lint`           | ESLint (capas con eslint-plugin-boundaries) y Prettier                                 |
 | `just e2e`            | Playwright en modo mock (claro/oscuro, escritorio y 390 px) y axe en todas las stories |
+| `just e2e-real`       | E2E contra el stack real (backend levantado): alta de empresa y aislamiento de tenants |
 | `just storybook`      | Storybook con selector de tema y addon de accesibilidad                                |
 | `just api-sync <ref>` | Trae el contrato de norte-backend y regenera el cliente con orval                      |
 | `just build`          | Build de producción en `dist/`                                                         |

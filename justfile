@@ -32,6 +32,10 @@ e2e:
     npm run build-storybook -- --quiet
     E2E_STORYBOOK=1 npx playwright test
 
+# E2E contra el stack real (criterio de salida del hito 0); necesita el backend levantado
+e2e-real:
+    npm run e2e:real
+
 # Storybook en http://localhost:6006
 storybook:
     npm run storybook

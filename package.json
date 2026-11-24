@@ -22,6 +22,7 @@
     "start:mock": "ng serve --configuration mock",
     "prestart:mock": "npm run api:generate",
     "e2e": "playwright test",
+    "e2e:real": "playwright test --config playwright.real.config.ts",
     "pree2e": "npm run api:generate",
     "e2e:storybook": "E2E_STORYBOOK=1 playwright test --project=storybook"
   },
