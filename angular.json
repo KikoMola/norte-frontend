@@ -53,12 +53,6 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "4kB",
                   "maximumError": "8kB"
-                },
-                {
-                  "type": "bundle",
-                  "name": "main",
-                  "maximumWarning": "300kB",
-                  "maximumError": "450kB"
                 }
               ],
               "outputHashing": "all"
