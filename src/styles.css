@@ -1,3 +1,44 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+@import './styles/tokens.css';
+
+@layer base {
+  html {
+    @apply bg-bg font-sans text-body text-text antialiased;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-semibold tracking-[-0.005em];
+  }
+
+  a {
+    @apply text-accent-text underline-offset-2 hover:text-accent-hover;
+    text-decoration-thickness: 1px;
+  }
+
+  /* Foco visible y consistente en toda la aplicación (WCAG 2.4.7). */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+
+  /* Cifras tabulares: importes y fechas alineados en columnas. */
+  .num {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
