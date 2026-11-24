@@ -62,3 +62,8 @@ Tokens y componentes siguen el lienzo de diseño del proyecto (ver `design/READM
 la SPA en el puerto 8080 con fallback a `index.html`, analizada con Trivy antes de publicarse.
 
 Ver [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Licencia
+
+[Apache 2.0](LICENSE): puedes usar, copiar, modificar, redistribuir y vender este código, también en productos
+cerrados, siempre que conserves el aviso de copyright y la licencia.
