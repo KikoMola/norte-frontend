@@ -12,7 +12,15 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "storybook": "ng run norte-front:storybook",
-    "build-storybook": "ng run norte-front:build-storybook"
+    "build-storybook": "ng run norte-front:build-storybook",
+    "api:sync": "node scripts/api-sync.mjs",
+    "api:generate": "orval --config orval.config.ts",
+    "prestart": "npm run api:generate",
+    "prebuild": "npm run api:generate",
+    "pretest": "npm run api:generate",
+    "prelint": "npm run api:generate",
+    "start:mock": "ng serve --configuration mock",
+    "prestart:mock": "npm run api:generate"
   },
   "private": true,
   "packageManager": "npm@11.16.0",
@@ -45,6 +53,7 @@
     "@angular/platform-browser-dynamic": "22.2.7",
     "@axe-core/playwright": "4.14.0",
     "@eslint/js": "10.0.1",
+    "@faker-js/faker": "10.6.0",
     "@playwright/test": "1.65.1",
     "@storybook/addon-a11y": "10.6.8",
     "@storybook/addon-docs": "10.6.8",
@@ -55,6 +64,9 @@
     "eslint": "10.15.0",
     "eslint-plugin-boundaries": "7.4.4",
     "jsdom": "31.0.1",
+    "msw": "3.0.7",
+    "msw-storybook-addon": "3.0.3",
+    "orval": "8.49.0",
     "postcss": "8.5.33",
     "prettier": "3.10.1",
     "storybook": "10.6.8",
@@ -74,5 +86,10 @@
     "fork-ts-checker-webpack-plugin": {
       "minimatch": "11.0.9"
     }
+  },
+  "msw": {
+    "workerDirectory": [
+      "src/mock-public"
+    ]
   }
 }

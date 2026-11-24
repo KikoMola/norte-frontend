@@ -37,6 +37,9 @@ export default defineConfig([
       '.angular/**',
       'storybook-static/**',
       'src/app/api/generated/**',
+      'src/mock-public/**',
+      'playwright-report/**',
+      'test-results/**',
     ],
   },
   {

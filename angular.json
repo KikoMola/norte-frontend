@@ -67,6 +67,28 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "mock": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/mock-api.ts",
+                  "with": "src/mock-api.mock.ts"
+                }
+              ],
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": "public"
+                },
+                {
+                  "glob": "mockServiceWorker.js",
+                  "input": "src/mock-public",
+                  "output": "/"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -79,6 +101,9 @@
             },
             "development": {
               "buildTarget": "norte-front:build:development"
+            },
+            "mock": {
+              "buildTarget": "norte-front:build:mock"
             }
           },
           "defaultConfiguration": "development",
@@ -87,7 +112,10 @@
           }
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "setupFiles": ["src/testing/vitest-setup.ts"]
+          }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",

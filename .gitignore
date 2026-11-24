@@ -52,3 +52,6 @@ Thumbs.db
 # Storybook
 /storybook-static
 *storybook.log
+
+# Cliente generado por orval desde api/openapi.yaml
+/src/app/api/generated

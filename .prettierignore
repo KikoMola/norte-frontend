@@ -7,3 +7,4 @@ storybook-static
 playwright-report
 test-results
 src/app/api/generated
+src/mock-public
