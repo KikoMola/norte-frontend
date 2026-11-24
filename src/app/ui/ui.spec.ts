@@ -32,7 +32,7 @@ describe('Button', () => {
     template: `<button appButton variant="primary" [loading]="loading()">Guardar</button>`,
   })
   class Host {
-    loading = signal(false);
+    readonly loading = signal(false);
   }
 
   it('applies the primary variant and marks itself busy while loading', async () => {
@@ -57,7 +57,7 @@ describe('Field and Input', () => {
   })
   class Host {
     control = new FormControl('');
-    error = signal<string | null>(null);
+    readonly error = signal<string | null>(null);
   }
 
   it('links the label, hint and error to the control', async () => {
@@ -108,12 +108,12 @@ describe('DataTable', () => {
       { id: 'name', header: 'companies.list.columns.name', value: (r) => r.name, sortable: true },
       { id: 'amount', header: 'Importe', value: (r) => r.amount, numeric: true },
     ];
-    rows = signal<Row[]>([
+    readonly rows = signal<Row[]>([
       { id: '1', name: 'Acme', amount: 10 },
       { id: '2', name: 'Globex', amount: 20 },
     ]);
-    status = signal<DataTableStatus>('ready');
-    sort = signal<DataTableSort | null>(null);
+    readonly status = signal<DataTableStatus>('ready');
+    readonly sort = signal<DataTableSort | null>(null);
     rowId = (row: Row) => row.id;
     nextClicks = 0;
   }
@@ -204,7 +204,7 @@ describe('Sidebar', () => {
     />`,
   })
   class Host {
-    collapsed = signal(false);
+    readonly collapsed = signal(false);
     groups = [
       {
         items: [{ label: 'shell.nav.home', icon: 'lucideHouse' as const, route: '/', exact: true }],
