@@ -1,0 +1,121 @@
+{
+  "app": {
+    "name": "Norte"
+  },
+  "titles": {
+    "home": "Inicio",
+    "companies": "Empresas",
+    "newCompany": "Nueva empresa"
+  },
+  "shell": {
+    "skipToContent": "Saltar al contenido",
+    "homeLink": "Norte, ir al inicio",
+    "nav": {
+      "label": "Navegación principal",
+      "home": "Inicio",
+      "companies": "Empresas",
+      "groups": {
+        "crm": "CRM"
+      }
+    },
+    "collapse": "Contraer menú",
+    "expand": "Expandir menú"
+  },
+  "topbar": {
+    "themeToDark": "Cambiar a modo oscuro",
+    "themeToLight": "Cambiar a modo claro",
+    "switchLanguage": "Cambiar el idioma a {{language}}",
+    "account": "Cuenta de {{name}}",
+    "tenant": "Organización",
+    "logout": "Cerrar sesión"
+  },
+  "languages": {
+    "es": "Español",
+    "en": "English"
+  },
+  "session": {
+    "loading": "Comprobando la sesión…",
+    "signedOutTitle": "Inicia sesión para continuar",
+    "signedOutBody": "Entra con tu cuenta de Norte. Te llevaremos a la página de acceso y volverás aquí.",
+    "login": "Iniciar sesión",
+    "errorTitle": "No se ha podido contactar con el servidor",
+    "errorBody": "Comprueba tu conexión. Si el problema sigue, avisa a quien administra Norte.",
+    "retry": "Reintentar"
+  },
+  "home": {
+    "title": "Inicio",
+    "welcome": "Hola, {{name}}",
+    "intro": "Esto es Norte. De momento puedes gestionar las empresas de tu organización.",
+    "goToCompanies": "Ir a empresas"
+  },
+  "ui": {
+    "table": {
+      "loading": "Cargando datos",
+      "empty": "No hay resultados",
+      "errorTitle": "No se han podido cargar los datos",
+      "errorBody": "El servidor no ha respondido. Puedes volver a intentarlo.",
+      "retry": "Reintentar",
+      "previous": "Página anterior",
+      "next": "Página siguiente",
+      "sortedAscending": "orden ascendente",
+      "sortedDescending": "orden descendente"
+    },
+    "toast": {
+      "region": "Avisos",
+      "close": "Cerrar aviso"
+    },
+    "field": {
+      "required": "obligatorio"
+    },
+    "trace": "Traza {{traceId}}"
+  },
+  "errors": {
+    "generic": "Algo ha salido mal. Vuelve a intentarlo.",
+    "network": "No hay conexión con el servidor.",
+    "validation": "Revisa los campos marcados.",
+    "unauthorized": "Tu sesión ha caducado. Vuelve a iniciar sesión.",
+    "forbidden": "No tienes permiso para hacer esto.",
+    "not_found": "No existe o ya no está disponible.",
+    "conflict": "Alguien ha cambiado estos datos a la vez que tú. Recarga para ver la última versión.",
+    "company": {
+      "tax_id": {
+        "duplicate": "Ya existe una empresa con ese NIF."
+      },
+      "not_found": "La empresa no existe o ya no está disponible."
+    },
+    "auth": {
+      "unauthenticated": "Tu sesión ha caducado. Vuelve a iniciar sesión.",
+      "tenant_missing": "Tu usuario no tiene una organización asignada. Avisa a quien administra Norte.",
+      "forbidden": "No tienes permiso para hacer esto."
+    },
+    "request": {
+      "malformed": "La petición no es válida.",
+      "invalid_parameter": "Algún filtro o parámetro no es válido. Vuelve a cargar la página.",
+      "method_not_allowed": "Esta acción no está disponible.",
+      "not_acceptable": "El servidor no puede responder en ese formato.",
+      "unsupported_media_type": "Formato de datos no admitido.",
+      "invalid": "La petición no es válida."
+    },
+    "resource": {
+      "not_found": "No existe o ya no está disponible."
+    },
+    "concurrency": {
+      "conflict": "Alguien ha cambiado estos datos a la vez que tú. Recarga para ver la última versión."
+    },
+    "internal": "Error inesperado del servidor. Si se repite, avisa con la traza."
+  },
+  "validation": {
+    "required": "Este campo es obligatorio.",
+    "maxlength": "Como máximo {{requiredLength}} caracteres.",
+    "minlength": "Como mínimo {{requiredLength}} caracteres.",
+    "tax_id": {
+      "invalid": "El NIF no es válido. Revisa la letra de control."
+    },
+    "invalid": "El valor no es válido.",
+    "length": "La longitud no es válida.",
+    "pattern": "El formato no es válido.",
+    "email": "El email no es válido.",
+    "min": "El valor es demasiado pequeño.",
+    "max": "El valor es demasiado grande."
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "app": {
+    "name": "Norte"
+  },
+  "titles": {
+    "home": "Home",
+    "companies": "Companies",
+    "newCompany": "New company"
+  },
+  "shell": {
+    "skipToContent": "Skip to content",
+    "homeLink": "Norte, go to home",
+    "nav": {
+      "label": "Main navigation",
+      "home": "Home",
+      "companies": "Companies",
+      "groups": {
+        "crm": "CRM"
+      }
+    },
+    "collapse": "Collapse menu",
+    "expand": "Expand menu"
+  },
+  "topbar": {
+    "themeToDark": "Switch to dark mode",
+    "themeToLight": "Switch to light mode",
+    "switchLanguage": "Change language to {{language}}",
+    "account": "Account of {{name}}",
+    "tenant": "Organization",
+    "logout": "Sign out"
+  },
+  "languages": {
+    "es": "Español",
+    "en": "English"
+  },
+  "session": {
+    "loading": "Checking your session…",
+    "signedOutTitle": "Sign in to continue",
+    "signedOutBody": "Use your Norte account. We will take you to the sign-in page and bring you back here.",
+    "login": "Sign in",
+    "errorTitle": "The server could not be reached",
+    "errorBody": "Check your connection. If the problem persists, contact your Norte administrator.",
+    "retry": "Try again"
+  },
+  "home": {
+    "title": "Home",
+    "welcome": "Hello, {{name}}",
+    "intro": "This is Norte. For now you can manage the companies of your organization.",
+    "goToCompanies": "Go to companies"
+  },
+  "ui": {
+    "table": {
+      "loading": "Loading data",
+      "empty": "No results",
+      "errorTitle": "The data could not be loaded",
+      "errorBody": "The server did not respond. You can try again.",
+      "retry": "Try again",
+      "previous": "Previous page",
+      "next": "Next page",
+      "sortedAscending": "sorted ascending",
+      "sortedDescending": "sorted descending"
+    },
+    "toast": {
+      "region": "Notifications",
+      "close": "Dismiss notification"
+    },
+    "field": {
+      "required": "required"
+    },
+    "trace": "Trace {{traceId}}"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "There is no connection to the server.",
+    "validation": "Check the highlighted fields.",
+    "unauthorized": "Your session has expired. Please sign in again.",
+    "forbidden": "You are not allowed to do this.",
+    "not_found": "It does not exist or is no longer available.",
+    "conflict": "Someone changed this data at the same time. Reload to see the latest version.",
+    "company": {
+      "tax_id": {
+        "duplicate": "A company with that tax ID already exists."
+      },
+      "not_found": "The company does not exist or is no longer available."
+    },
+    "auth": {
+      "unauthenticated": "Your session has expired. Please sign in again.",
+      "tenant_missing": "Your user has no organization assigned. Contact your Norte administrator.",
+      "forbidden": "You are not allowed to do this."
+    },
+    "request": {
+      "malformed": "The request is not valid.",
+      "invalid_parameter": "A filter or parameter is not valid. Reload the page.",
+      "method_not_allowed": "This action is not available.",
+      "not_acceptable": "The server cannot respond in that format.",
+      "unsupported_media_type": "Unsupported data format.",
+      "invalid": "The request is not valid."
+    },
+    "resource": {
+      "not_found": "It does not exist or is no longer available."
+    },
+    "concurrency": {
+      "conflict": "Someone changed this data at the same time. Reload to see the latest version."
+    },
+    "internal": "Unexpected server error. If it happens again, report it with the trace."
+  },
+  "validation": {
+    "required": "This field is required.",
+    "maxlength": "At most {{requiredLength}} characters.",
+    "minlength": "At least {{requiredLength}} characters.",
+    "tax_id": {
+      "invalid": "The tax ID is not valid. Check the control letter."
+    },
+    "invalid": "The value is not valid.",
+    "length": "The length is not valid.",
+    "pattern": "The format is not valid.",
+    "email": "The email is not valid.",
+    "min": "The value is too small.",
+    "max": "The value is too large."
+  }
+}

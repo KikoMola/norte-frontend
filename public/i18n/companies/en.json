@@ -1,0 +1,32 @@
+{
+  "companies": {
+    "list": {
+      "breadcrumb": "CRM",
+      "title": "Companies",
+      "new": "New company",
+      "search": "Search by name or tax ID",
+      "searchLabel": "Search companies",
+      "caption": "Companies in your organization",
+      "columns": { "name": "Company", "taxId": "Tax ID", "createdAt": "Created" },
+      "pageCount": "{{count}} companies on this page",
+      "emptyTitle": "No companies yet",
+      "emptyBody": "Add the first one to start working with it.",
+      "noResultsTitle": "No company matches “{{q}}”",
+      "noResultsBody": "Try another part of the name or the full tax ID."
+    },
+    "new": {
+      "breadcrumb": "Companies",
+      "title": "New company",
+      "panelTitle": "Tax details",
+      "name": "Legal name",
+      "nameHelp": "As registered in the commercial registry.",
+      "taxId": "Tax ID",
+      "taxIdPlaceholder": "B12345678",
+      "taxIdHelp": "Spanish NIF, NIE or CIF. Stored in uppercase without dashes.",
+      "save": "Save company",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "created": "Company “{{name}}” created."
+    }
+  }
+}

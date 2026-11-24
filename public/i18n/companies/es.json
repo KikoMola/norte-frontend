@@ -1,0 +1,32 @@
+{
+  "companies": {
+    "list": {
+      "breadcrumb": "CRM",
+      "title": "Empresas",
+      "new": "Nueva empresa",
+      "search": "Buscar por nombre o NIF",
+      "searchLabel": "Buscar empresas",
+      "caption": "Empresas de la organización",
+      "columns": { "name": "Empresa", "taxId": "NIF", "createdAt": "Alta" },
+      "pageCount": "{{count}} empresas en esta página",
+      "emptyTitle": "Aún no hay empresas",
+      "emptyBody": "Da de alta la primera para empezar a trabajar con ella.",
+      "noResultsTitle": "Ninguna empresa coincide con «{{q}}»",
+      "noResultsBody": "Prueba con otra parte del nombre o con el NIF completo."
+    },
+    "new": {
+      "breadcrumb": "Empresas",
+      "title": "Nueva empresa",
+      "panelTitle": "Datos fiscales",
+      "name": "Razón social",
+      "nameHelp": "Tal como figura en el registro mercantil.",
+      "taxId": "NIF",
+      "taxIdPlaceholder": "B12345678",
+      "taxIdHelp": "NIF, NIE o CIF. Se guarda en mayúsculas y sin guiones.",
+      "save": "Guardar empresa",
+      "saving": "Guardando…",
+      "cancel": "Cancelar",
+      "created": "Empresa «{{name}}» dada de alta."
+    }
+  }
+}
