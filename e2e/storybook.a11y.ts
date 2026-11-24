@@ -8,6 +8,8 @@ import { expect, test } from '@playwright/test';
 const STORYBOOK = 'http://localhost:6007';
 
 test('todas las stories pasan axe en claro y oscuro', async ({ page, request }) => {
+  // Recorre todas las stories en los dos temas: bastante más que los 30 s por defecto en CI.
+  test.setTimeout(300_000);
   const index = (await (await request.get(`${STORYBOOK}/index.json`)).json()) as {
     entries: Record<string, { id: string; type: string }>;
   };
