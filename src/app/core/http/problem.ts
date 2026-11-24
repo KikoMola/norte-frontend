@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { Injector, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { catchError, throwError } from 'rxjs';
 
@@ -25,9 +25,9 @@ const FALLBACK_KEYS: Record<number, string> = {
  * - Un 401 en /api marca la sesión como caducada y la aplicación vuelve a la pantalla de inicio de sesión.
  */
 export const problemInterceptor: HttpInterceptorFn = (request, next) => {
-  const toasts = inject(Toasts);
-  const translate = inject(TranslateService);
-  const session = inject(Session);
+  // Se resuelven al fallar, no al crear el interceptor: el loader de traducciones también usa HttpClient y
+  // pedir TranslateService aquí crearía una dependencia circular.
+  const injector = inject(Injector);
 
   return next(request).pipe(
     catchError((error: unknown) => {
@@ -35,13 +35,15 @@ export const problemInterceptor: HttpInterceptorFn = (request, next) => {
         return throwError(() => error);
       }
       if (error.status === 401) {
-        session.expire();
+        injector.get(Session).expire();
       }
       if (request.context.get(HANDLED_STATUSES).includes(error.status)) {
         return throwError(() => error);
       }
       const problem = toProblem(error);
-      toasts.error(messageFor(translate, error.status, problem), problem?.traceId);
+      injector
+        .get(Toasts)
+        .error(messageFor(injector.get(TranslateService), error.status, problem), problem?.traceId);
       return throwError(() => error);
     }),
   );

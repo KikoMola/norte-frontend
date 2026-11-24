@@ -167,6 +167,7 @@ const features = tableFeatures({});
                         class="h-11 border-b border-border px-3 align-middle first:pl-5 last:pr-5"
                         [class.text-right]="column.numeric"
                         [class.num]="column.numeric"
+                        [class.whitespace-nowrap]="column.numeric"
                       >
                         @if (templateFor(cell.column.id); as template) {
                           <ng-container

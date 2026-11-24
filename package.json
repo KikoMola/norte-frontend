@@ -20,7 +20,9 @@
     "pretest": "npm run api:generate",
     "prelint": "npm run api:generate",
     "start:mock": "ng serve --configuration mock",
-    "prestart:mock": "npm run api:generate"
+    "prestart:mock": "npm run api:generate",
+    "e2e": "playwright test",
+    "pree2e": "npm run api:generate"
   },
   "private": true,
   "packageManager": "npm@11.16.0",

@@ -30,7 +30,7 @@ const COLLAPSED_KEY = 'norte.sidebar.collapsed';
   selector: 'app-shell',
   imports: [Button, Icon, RouterOutlet, Sidebar, Topbar, TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'flex min-h-dvh flex-wrap items-start' },
+  host: { class: 'flex min-h-dvh flex-wrap content-start items-start' },
   template: `
     <a
       href="#main"
@@ -67,20 +67,19 @@ const COLLAPSED_KEY = 'norte.sidebar.collapsed';
             <app-icon [name]="theme.resolved() === 'dark' ? 'lucideSun' : 'lucideMoon'" />
           </button>
 
+          @let switchLanguageLabel =
+            'topbar.switchLanguage'
+              | translate: { language: ('languages.' + i18n.next() | translate) };
+          <!-- Solo icono: un texto visible distinto del nombre accesible incumple WCAG 2.5.3. -->
           <button
             appButton
             variant="ghost"
-            class="gap-1.5 px-2.5"
-            [attr.aria-label]="
-              'topbar.switchLanguage'
-                | translate: { language: ('languages.' + i18n.next() | translate) }
-            "
+            iconOnly
+            [attr.aria-label]="switchLanguageLabel"
+            [title]="switchLanguageLabel"
             (click)="switchLanguage()"
           >
             <app-icon name="lucideLanguages" />
-            <span class="text-small font-medium uppercase" aria-hidden="true">{{
-              i18n.current()
-            }}</span>
           </button>
 
           @if (session.user(); as user) {
