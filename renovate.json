@@ -1,0 +1,93 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests",
+    "docker:pinDigests",
+    ":dependencyDashboard",
+    ":semanticCommits"
+  ],
+  "baseBranches": ["master"],
+  "timezone": "Europe/Madrid",
+  "schedule": ["before 7am on monday"],
+  "labels": ["dependencias"],
+  "prConcurrentLimit": 5,
+  "minimumReleaseAge": "3 days",
+  "rangeStrategy": "pin",
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "schedule": ["at any time"],
+    "minimumReleaseAge": null,
+    "labels": ["seguridad"]
+  },
+  "packageRules": [
+    {
+      "description": "Angular (framework, CLI, build y CDK) avanza junto y se queda en la línea 22.2 hasta decidir el salto.",
+      "matchPackageNames": [
+        "@angular/**",
+        "@angular-devkit/**",
+        "angular-eslint",
+        "@angular-eslint/**"
+      ],
+      "groupName": "angular",
+      "allowedVersions": "<22.3.0"
+    },
+    {
+      "description": "Storybook y sus addons en un único PR.",
+      "matchPackageNames": ["storybook", "@storybook/**", "msw-storybook-addon"],
+      "groupName": "storybook"
+    },
+    {
+      "description": "Herramientas de lint y formato.",
+      "matchPackageNames": [
+        "eslint",
+        "@eslint/**",
+        "typescript-eslint",
+        "eslint-plugin-boundaries",
+        "prettier"
+      ],
+      "groupName": "lint"
+    },
+    {
+      "description": "Playwright y axe.",
+      "matchPackageNames": ["@playwright/test", "@axe-core/**"],
+      "groupName": "playwright"
+    },
+    {
+      "description": "Todas las GitHub Actions en un único PR.",
+      "matchManagers": ["github-actions"],
+      "groupName": "github actions"
+    },
+    {
+      "description": "Imágenes de herramientas de CI (Trivy, Gitleaks) e imágenes base del Dockerfile.",
+      "matchManagers": ["custom.regex"],
+      "matchDatasources": ["docker"],
+      "groupName": "imágenes docker"
+    },
+    {
+      "description": "Las versiones mayores se revisan a mano.",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Imágenes fijadas en variables de entorno de los workflows.",
+      "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "_IMAGE: (?<depName>[a-z0-9./-]+):(?<currentValue>[^@\\s]+)@(?<currentDigest>sha256:[a-f0-9]+)"
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Imágenes base del Dockerfile (ARG con digest).",
+      "managerFilePatterns": ["/^Dockerfile$/"],
+      "matchStrings": [
+        "ARG [A-Z_]+_IMAGE=(?<depName>[a-z0-9./-]+):(?<currentValue>[^@\\s]+)@(?<currentDigest>sha256:[a-f0-9]+)"
+      ],
+      "datasourceTemplate": "docker"
+    }
+  ]
+}
