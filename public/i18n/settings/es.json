@@ -1,0 +1,89 @@
+{
+  "settings": {
+    "title": "Ajustes",
+    "sections": {
+      "label": "Secciones de ajustes",
+      "company": "Empresa"
+    },
+    "company": {
+      "loadError": "No se han podido cargar los ajustes de la empresa.",
+      "readOnly": "Solo puedes consultar estos datos. Para cambiarlos hace falta el permiso de editar ajustes.",
+      "fiscal": {
+        "title": "Datos fiscales",
+        "help": "Aparecen como emisor en tus facturas.",
+        "legalName": "Razón social",
+        "tradeName": "Nombre comercial",
+        "tradeNameHelp": "Si es distinto de la razón social.",
+        "taxId": "NIF",
+        "taxIdHelp": "Hace falta para emitir facturas."
+      },
+      "address": {
+        "title": "Dirección fiscal",
+        "line1": "Dirección",
+        "line2": "Dirección (continuación)",
+        "postalCode": "Código postal",
+        "city": "Población",
+        "province": "Provincia",
+        "country": "País"
+      },
+      "contact": {
+        "title": "Contacto",
+        "email": "Correo de facturación",
+        "emailHelp": "Las respuestas de tus clientes a los correos de Norte llegan aquí.",
+        "phone": "Teléfono",
+        "website": "Web"
+      },
+      "region": {
+        "title": "Ejercicio y región",
+        "fiscalYearStartMonth": "Inicio del ejercicio fiscal",
+        "fiscalYearHelp": "La numeración de facturas empieza de nuevo cada ejercicio.",
+        "timeZone": "Zona horaria",
+        "language": "Idioma de los documentos",
+        "languageHelp": "Para las facturas y los correos que reciben tus clientes."
+      },
+      "logo": {
+        "title": "Logo",
+        "help": "PNG, JPEG o WebP de hasta 512 KB. Sale en tus facturas.",
+        "alt": "Logo de {{name}}",
+        "none": "Todavía no hay logo.",
+        "upload": "Subir logo",
+        "change": "Cambiar logo",
+        "remove": "Quitar logo",
+        "tooLarge": "El logo no puede pasar de 512 KB.",
+        "uploaded": "Logo actualizado.",
+        "removed": "Logo quitado."
+      },
+      "history": {
+        "title": "Historial",
+        "subject": "los ajustes"
+      },
+      "save": "Guardar cambios",
+      "saving": "Guardando…",
+      "saved": "Ajustes guardados.",
+      "discard": "Descartar cambios",
+      "stale": "Otra persona ha cambiado estos ajustes mientras los editabas. Recarga para ver la versión actual.",
+      "reload": "Recargar"
+    },
+    "fields": {
+      "legalName": "la razón social",
+      "tradeName": "el nombre comercial",
+      "taxId": "el NIF",
+      "address.line1": "la dirección",
+      "address.line2": "la dirección (continuación)",
+      "address.postalCode": "el código postal",
+      "address.city": "la población",
+      "address.province": "la provincia",
+      "address.country": "el país",
+      "email": "el correo de facturación",
+      "phone": "el teléfono",
+      "website": "la web",
+      "fiscalYearStartMonth": "el inicio del ejercicio",
+      "timeZone": "la zona horaria",
+      "language": "el idioma de los documentos"
+    },
+    "languages": {
+      "es": "Español",
+      "en": "Inglés"
+    }
+  }
+}

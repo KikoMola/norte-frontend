@@ -5,7 +5,8 @@
   "titles": {
     "home": "Inicio",
     "companies": "Empresas",
-    "newCompany": "Nueva empresa"
+    "newCompany": "Nueva empresa",
+    "settings": "Ajustes"
   },
   "shell": {
     "skipToContent": "Saltar al contenido",
@@ -16,7 +17,8 @@
       "companies": "Empresas",
       "groups": {
         "crm": "CRM"
-      }
+      },
+      "settings": "Ajustes"
     },
     "collapse": "Contraer menú",
     "expand": "Expandir menú"
@@ -130,6 +132,29 @@
     "pattern": "El formato no es válido.",
     "email": "El email no es válido.",
     "min": "El valor es demasiado pequeño.",
-    "max": "El valor es demasiado grande."
+    "max": "El valor es demasiado grande.",
+    "too_long": "Es demasiado largo.",
+    "postal_code": {
+      "invalid": "El código postal español tiene 5 cifras y empieza por 01 a 52."
+    },
+    "phone": {
+      "invalid": "El teléfono no es válido."
+    },
+    "website": {
+      "invalid": "La web no es válida."
+    },
+    "time_zone": {
+      "invalid": "La zona horaria no es válida."
+    },
+    "country": {
+      "invalid": "El país no es válido."
+    },
+    "language": {
+      "unsupported": "El idioma no está disponible."
+    },
+    "logo": {
+      "unsupported_type": "El logo tiene que ser una imagen PNG, JPEG o WebP.",
+      "too_large": "El logo no puede pasar de 512 KB."
+    }
   }
 }

@@ -4,4 +4,5 @@
  */
 export * from './generated/endpoints/companies/companies.service';
 export * from './generated/endpoints/session/session.service';
+export * from './generated/endpoints/settings/settings.service';
 export * from './generated/model';

@@ -45,11 +45,21 @@ const NAV: ShellNavGroup[] = [
       },
     ],
   },
+  {
+    items: [
+      {
+        label: 'shell.nav.settings',
+        icon: 'lucideSettings',
+        route: '/ajustes',
+        permission: 'settings:read',
+      },
+    ],
+  },
 ];
 
 /**
  * Shell de la aplicación (paso 0.28): barra lateral fija y contraíble, barra superior fija y contenido desplazable.
- * La navegación solo muestra lo que existe: Inicio y Empresas. Los grupos (CRM, Ventas, Operaciones, Finanzas) se
+ * La navegación solo muestra lo que existe: Inicio, Empresas y Ajustes. Los grupos (CRM, Ventas, Operaciones, Finanzas) se
  * irán llenando con cada hito; el cambio de organización, el periodo, las notificaciones y la paleta de comandos
  * no se pintan hasta que funcionen.
  */

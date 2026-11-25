@@ -1,0 +1,89 @@
+{
+  "settings": {
+    "title": "Settings",
+    "sections": {
+      "label": "Settings sections",
+      "company": "Company"
+    },
+    "company": {
+      "loadError": "The company settings could not be loaded.",
+      "readOnly": "You can only view these details. Changing them requires the edit settings permission.",
+      "fiscal": {
+        "title": "Tax details",
+        "help": "They appear as the issuer on your invoices.",
+        "legalName": "Legal name",
+        "tradeName": "Trade name",
+        "tradeNameHelp": "If different from the legal name.",
+        "taxId": "Tax ID",
+        "taxIdHelp": "Required to issue invoices."
+      },
+      "address": {
+        "title": "Registered address",
+        "line1": "Address",
+        "line2": "Address (continued)",
+        "postalCode": "Postal code",
+        "city": "City",
+        "province": "Province",
+        "country": "Country"
+      },
+      "contact": {
+        "title": "Contact",
+        "email": "Billing email",
+        "emailHelp": "Your customers' replies to Norte emails arrive here.",
+        "phone": "Phone",
+        "website": "Website"
+      },
+      "region": {
+        "title": "Fiscal year and region",
+        "fiscalYearStartMonth": "Fiscal year starts in",
+        "fiscalYearHelp": "Invoice numbering starts again every fiscal year.",
+        "timeZone": "Time zone",
+        "language": "Document language",
+        "languageHelp": "For the invoices and emails your customers receive."
+      },
+      "logo": {
+        "title": "Logo",
+        "help": "PNG, JPEG or WebP up to 512 KB. It appears on your invoices.",
+        "alt": "{{name}} logo",
+        "none": "No logo yet.",
+        "upload": "Upload logo",
+        "change": "Change logo",
+        "remove": "Remove logo",
+        "tooLarge": "The logo cannot exceed 512 KB.",
+        "uploaded": "Logo updated.",
+        "removed": "Logo removed."
+      },
+      "history": {
+        "title": "History",
+        "subject": "the settings"
+      },
+      "save": "Save changes",
+      "saving": "Saving…",
+      "saved": "Settings saved.",
+      "discard": "Discard changes",
+      "stale": "Someone else changed these settings while you were editing them. Reload to see the current version.",
+      "reload": "Reload"
+    },
+    "fields": {
+      "legalName": "the legal name",
+      "tradeName": "the trade name",
+      "taxId": "the tax ID",
+      "address.line1": "the address",
+      "address.line2": "the address (continued)",
+      "address.postalCode": "the postal code",
+      "address.city": "the city",
+      "address.province": "the province",
+      "address.country": "the country",
+      "email": "the billing email",
+      "phone": "the phone",
+      "website": "the website",
+      "fiscalYearStartMonth": "the fiscal year start",
+      "timeZone": "the time zone",
+      "language": "the document language"
+    },
+    "languages": {
+      "es": "Spanish",
+      "en": "English"
+    }
+  }
+}

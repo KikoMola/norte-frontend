@@ -22,6 +22,8 @@ tags:
     description: Sesión del usuario actual
   - name: companies
     description: Empresas (maestro de terceros, módulo `parties`)
+  - name: settings
+    description: Ajustes del tenant
 
 paths:
   /me:
@@ -182,6 +184,180 @@ paths:
               examples:
                 renamed:
                   $ref: '#/components/examples/CompanyHistory'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+
+  /settings/company:
+    get:
+      tags: [settings]
+      operationId: getCompanySettings
+      summary: Datos de la empresa del tenant como emisor
+      description: Exige `settings:read`. `404 settings.not_found` si el tenant se dio de alta antes de que existieran.
+      responses:
+        '200':
+          description: Ajustes de la empresa
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanySettings'
+              examples:
+                acme:
+                  $ref: '#/components/examples/CompanySettingsAcme'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    put:
+      tags: [settings]
+      operationId: updateCompanySettings
+      summary: Cambia los datos de la empresa
+      description: Exige `settings:edit` e `If-Match`. El logo se cambia aparte.
+      parameters:
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanySettingsUpdate'
+      responses:
+        '200':
+          description: Ajustes de la empresa
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanySettings'
+              examples:
+                acme:
+                  $ref: '#/components/examples/CompanySettingsAcme'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '412':
+          $ref: '#/components/responses/PreconditionFailed'
+        '422':
+          $ref: '#/components/responses/UnprocessableContent'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+
+  /settings/company/logo:
+    put:
+      tags: [settings]
+      operationId: changeCompanyLogo
+      summary: Sustituye el logo de la empresa
+      description: |
+        Exige `settings:edit` e `If-Match`. PNG, JPEG o WebP de hasta 512 KB; el tipo se comprueba por el contenido.
+        `422` con `logo.unsupported_type` o `logo.too_large` en el campo `file`.
+      parameters:
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Ajustes de la empresa
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanySettings'
+              examples:
+                acme:
+                  $ref: '#/components/examples/CompanySettingsAcme'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '412':
+          $ref: '#/components/responses/PreconditionFailed'
+        '422':
+          $ref: '#/components/responses/UnprocessableContent'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      tags: [settings]
+      operationId: removeCompanyLogo
+      summary: Quita el logo de la empresa
+      description: Exige `settings:edit` e `If-Match`.
+      parameters:
+        - $ref: '#/components/parameters/IfMatch'
+      responses:
+        '200':
+          description: Ajustes de la empresa
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanySettings'
+              examples:
+                acme:
+                  $ref: '#/components/examples/CompanySettingsAcme'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '412':
+          $ref: '#/components/responses/PreconditionFailed'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+
+  /settings/company/history:
+    get:
+      tags: [settings]
+      operationId: listCompanySettingsHistory
+      summary: Historial de cambios de los datos de la empresa
+      description: Exige `settings:read`. Los campos de la dirección van con punto (`address.city`).
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Página del historial
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditEventPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -465,6 +641,87 @@ components:
         pageInfo:
           $ref: '#/components/schemas/PageInfo'
 
+    CompanySettingsAddress:
+      type: object
+      description: Dirección fiscal. Solo el país es obligatorio; el resto hace falta para emitir facturas.
+      required: [country]
+      properties:
+        line1:
+          type: [string, 'null']
+          maxLength: 200
+        line2:
+          type: [string, 'null']
+          maxLength: 200
+        postalCode:
+          type: [string, 'null']
+          maxLength: 20
+        city:
+          type: [string, 'null']
+          maxLength: 100
+        province:
+          type: [string, 'null']
+          maxLength: 100
+        country:
+          type: string
+          description: Código ISO 3166-1 alfa-2.
+          pattern: '^[A-Z]{2}$'
+          examples: [ES]
+
+    CompanySettingsUpdate:
+      type: object
+      description: Datos de la empresa como emisor de facturas (paso 1.9). Los opcionales vacíos se guardan como `null`.
+      required: [legalName, address, fiscalYearStartMonth, timeZone, language]
+      properties:
+        legalName:
+          type: string
+          minLength: 1
+          maxLength: 200
+        tradeName:
+          type: [string, 'null']
+          maxLength: 200
+        taxId:
+          type: [string, 'null']
+          description: NIF del emisor. Hace falta para emitir facturas.
+          maxLength: 15
+        address:
+          $ref: '#/components/schemas/CompanySettingsAddress'
+        email:
+          type: [string, 'null']
+          description: Correo de facturación; las respuestas de los clientes a los correos de Norte van aquí.
+          maxLength: 254
+        phone:
+          type: [string, 'null']
+          maxLength: 30
+        website:
+          type: [string, 'null']
+          maxLength: 200
+        fiscalYearStartMonth:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 12
+          description: Mes en que empieza el ejercicio fiscal (1 = enero).
+        timeZone:
+          type: string
+          description: Zona horaria IANA.
+          maxLength: 64
+          examples: [Europe/Madrid]
+        language:
+          type: string
+          description: Idioma de los documentos y correos que se envían a los clientes.
+          enum: [es, en]
+
+    CompanySettings:
+      allOf:
+        - $ref: '#/components/schemas/CompanySettingsUpdate'
+        - type: object
+          properties:
+            logoUrl:
+              type: string
+              format: uri
+              readOnly: true
+              description: URL firmada del logo, válida 5 minutos. Falta si no hay logo.
+
     Me:
       type: object
       required: [id, username, tenantId, roles, permissions, modules]
@@ -613,6 +870,24 @@ components:
         pageInfo:
           nextCursor: null
           hasNext: false
+    CompanySettingsAcme:
+      summary: Emisor con los datos completos
+      value:
+        legalName: Acme Ibérica S.L.
+        tradeName: Acme
+        taxId: B12345674
+        address:
+          line1: Calle Mayor 1
+          postalCode: '46001'
+          city: Valencia
+          province: Valencia
+          country: ES
+        email: facturas@acme.test
+        phone: '+34 961 000 000'
+        website: https://acme.test
+        fiscalYearStartMonth: 1
+        timeZone: Europe/Madrid
+        language: es
     ProblemInvalidTaxId:
       value:
         type: https://norte.dev/problems/validation

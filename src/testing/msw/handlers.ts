@@ -1,6 +1,13 @@
 import { HttpResponse, http } from 'msw';
 
-import type { Company, CompanyCreate, CompanyPage, Problem } from '../../app/api';
+import type {
+  AuditEventPage,
+  Company,
+  CompanyCreate,
+  CompanyPage,
+  CompanySettingsUpdate,
+  Problem,
+} from '../../app/api';
 import { isValidTaxId, normalizeTaxId } from '../../app/core/validation/tax-id';
 import { db } from './db';
 
@@ -114,9 +121,107 @@ export const handlers = [
       : problem(404, 'company.not_found', 'La empresa no existe');
   }),
 
+  // Ajustes de la empresa (paso 1.9): If-Match contra la versión, 412 si no coincide.
+  http.get(`${API}/settings/company`, () => settingsResponse()),
+
+  http.put<never, CompanySettingsUpdate>(`${API}/settings/company`, async ({ request }) => {
+    const stale = checkIfMatch(request);
+    if (stale) {
+      return stale;
+    }
+    const body = await request.json();
+    const taxId = body.taxId ? normalizeTaxId(body.taxId) : null;
+    const errors = [
+      ...(body.legalName?.trim()
+        ? []
+        : [{ field: 'legalName', code: 'required', message: 'La razón social es obligatoria.' }]),
+      ...(taxId && !isValidTaxId(taxId)
+        ? [{ field: 'taxId', code: 'tax_id.invalid', message: 'El NIF no es válido.' }]
+        : []),
+    ];
+    if (errors.length) {
+      return problem(422, 'validation', 'Datos no válidos', { errors });
+    }
+    const before = db.settings;
+    db.settings = { ...body, legalName: body.legalName.trim(), taxId, logoUrl: before.logoUrl };
+    recordSettingsChange(before.legalName, db.settings.legalName);
+    return settingsResponse();
+  }),
+
+  http.put(`${API}/settings/company/logo`, async ({ request }) => {
+    const stale = checkIfMatch(request);
+    if (stale) {
+      return stale;
+    }
+    const file = (await request.formData()).get('file');
+    // En Vitest el fichero viene de otro entorno (undici frente a jsdom): instanceof Blob falla, se mira su tipo.
+    const fileType = typeof file === 'object' && file !== null ? file.type : '';
+    if (!['image/png', 'image/jpeg', 'image/webp'].includes(fileType)) {
+      return problem(422, 'validation', 'Datos no válidos', {
+        errors: [
+          { field: 'file', code: 'logo.unsupported_type', message: 'El logo no es una imagen.' },
+        ],
+      });
+    }
+    // Una imagen de 1×1 vale para enseñar algo en mock, Storybook y E2E.
+    db.settings = {
+      ...db.settings,
+      logoUrl:
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',
+    };
+    return settingsResponse();
+  }),
+
+  http.delete(`${API}/settings/company/logo`, ({ request }) => {
+    const stale = checkIfMatch(request);
+    if (stale) {
+      return stale;
+    }
+    db.settings = { ...db.settings, logoUrl: undefined };
+    return settingsResponse();
+  }),
+
+  http.get(`${API}/settings/company/history`, () => {
+    const page: AuditEventPage = { items: db.settingsHistory, pageInfo: { hasNext: false } };
+    return HttpResponse.json(page);
+  }),
+
   // Cierre de sesión del BFF: 202 con la URL a la que navegar.
   http.post('/logout', () => {
     db.me = null;
     return new HttpResponse(null, { status: 202, headers: { Location: '/' } });
   }),
 ];
+
+function settingsResponse() {
+  return HttpResponse.json(db.settings, { headers: { ETag: `"${db.settingsVersion}"` } });
+}
+
+/** 412 si If-Match no es la versión actual; si coincide, la siguiente escritura sube la versión. */
+function checkIfMatch(request: Request) {
+  if (request.headers.get('If-Match') !== `"${db.settingsVersion}"`) {
+    return problem(
+      412,
+      'concurrency.precondition_failed',
+      'Otro usuario ha modificado este registro',
+    );
+  }
+  db.settingsVersion++;
+  return null;
+}
+
+function recordSettingsChange(from: string, to: string) {
+  if (from === to) {
+    return;
+  }
+  db.settingsHistory = [
+    {
+      id: String(db.settingsHistory.length + 1),
+      occurredAt: new Date().toISOString(),
+      action: 'updated',
+      actor: { id: 'user-ana', name: 'Ana García' },
+      changes: [{ field: 'legalName', from, to }],
+    },
+    ...db.settingsHistory,
+  ];
+}

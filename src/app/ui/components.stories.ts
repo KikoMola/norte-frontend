@@ -10,6 +10,7 @@ import { Input } from './input/input';
 import { PageHeader } from './page-header/page-header';
 import { Panel } from './panel/panel';
 import { Search } from './search/search';
+import { Select } from './select/select';
 
 /** Componentes básicos del hito 0 (paso 0.27). Cada story se revisa en claro y oscuro y con el panel de accesibilidad. */
 const meta: Meta = {
@@ -26,6 +27,7 @@ const meta: Meta = {
         Panel,
         ReactiveFormsModule,
         Search,
+        Select,
       ],
     }),
   ],
@@ -90,6 +92,12 @@ export const Campos: Story = {
         </app-field>
         <app-field label="Límite de crédito">
           <input appInput numeric value="3.000,00" />
+        </app-field>
+        <app-field label="Idioma de los documentos" hint="Desplegable nativo (app-select).">
+          <select appSelect><option>Español</option><option>Inglés</option></select>
+        </app-field>
+        <app-field label="País" required>
+          <select appSelect disabled><option>España</option></select>
         </app-field>
         <div class="flex flex-col gap-1.5">
           <span class="text-small font-medium">Buscador</span>

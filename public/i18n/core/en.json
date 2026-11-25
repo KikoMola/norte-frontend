@@ -5,7 +5,8 @@
   "titles": {
     "home": "Home",
     "companies": "Companies",
-    "newCompany": "New company"
+    "newCompany": "New company",
+    "settings": "Settings"
   },
   "shell": {
     "skipToContent": "Skip to content",
@@ -16,7 +17,8 @@
       "companies": "Companies",
       "groups": {
         "crm": "CRM"
-      }
+      },
+      "settings": "Settings"
     },
     "collapse": "Collapse menu",
     "expand": "Expand menu"
@@ -130,6 +132,29 @@
     "pattern": "The format is not valid.",
     "email": "The email is not valid.",
     "min": "The value is too small.",
-    "max": "The value is too large."
+    "max": "The value is too large.",
+    "too_long": "It is too long.",
+    "postal_code": {
+      "invalid": "A Spanish postal code has 5 digits and starts with 01 to 52."
+    },
+    "phone": {
+      "invalid": "The phone number is not valid."
+    },
+    "website": {
+      "invalid": "The website is not valid."
+    },
+    "time_zone": {
+      "invalid": "The time zone is not valid."
+    },
+    "country": {
+      "invalid": "The country is not valid."
+    },
+    "language": {
+      "unsupported": "The language is not available."
+    },
+    "logo": {
+      "unsupported_type": "The logo must be a PNG, JPEG or WebP image.",
+      "too_large": "The logo cannot exceed 512 KB."
+    }
   }
 }

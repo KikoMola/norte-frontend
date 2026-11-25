@@ -16,5 +16,11 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./features/companies/companies.routes').then((m) => m.COMPANIES_ROUTES),
   },
+  {
+    path: 'ajustes',
+    canMatch: [requirePermission('settings:read')],
+    loadChildren: () =>
+      import('./features/settings/settings.routes').then((m) => m.SETTINGS_ROUTES),
+  },
   { path: '**', redirectTo: '' },
 ];

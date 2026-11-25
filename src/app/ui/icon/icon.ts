@@ -10,6 +10,7 @@ import {
   lucideCircleAlert,
   lucideCircleCheck,
   lucideHouse,
+  lucideImage,
   lucideInfo,
   lucideLanguages,
   lucideLoaderCircle,
@@ -21,9 +22,11 @@ import {
   lucidePlus,
   lucideRefreshCw,
   lucideSearch,
+  lucideSettings,
   lucideSun,
   lucideTrash2,
   lucideTriangleAlert,
+  lucideUpload,
   lucideX,
 } from '@ng-icons/lucide';
 
@@ -38,6 +41,7 @@ const ICONS = {
   lucideCircleAlert,
   lucideCircleCheck,
   lucideHouse,
+  lucideImage,
   lucideInfo,
   lucideLanguages,
   lucideLoaderCircle,
@@ -49,9 +53,11 @@ const ICONS = {
   lucidePlus,
   lucideRefreshCw,
   lucideSearch,
+  lucideSettings,
   lucideSun,
   lucideTrash2,
   lucideTriangleAlert,
+  lucideUpload,
   lucideX,
 };
 
