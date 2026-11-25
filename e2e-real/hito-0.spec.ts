@@ -27,7 +27,9 @@ async function signIn(browser: Browser, user: string): Promise<Page> {
   await page.goto('/');
   await page.getByRole('button', { name: 'Iniciar sesión' }).click();
   await page.waitForURL(/localhost:8180/);
+  // Con organizaciones (paso 1.1) Keycloak pide primero el usuario y en otra pantalla la contraseña.
   await page.fill('#username', user);
+  await page.click('#kc-login');
   await page.fill('#password', user);
   await page.click('#kc-login');
   await page.waitForURL((url) => url.origin === 'http://localhost:4200');
