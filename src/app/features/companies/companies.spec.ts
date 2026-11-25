@@ -5,6 +5,7 @@ import { HttpResponse, http } from 'msw';
 import { company, db } from '../../../testing/msw/db';
 import { server } from '../../../testing/msw/server';
 import { provideTestApp, settle } from '../../../testing/providers';
+import { Session } from '../../core/auth/session';
 import { Toasts } from '../../ui/toast/toast';
 import { CompanyListPage } from './company-list-page';
 import { CompanyNewPage } from './company-new-page';
@@ -14,6 +15,8 @@ async function render<T>(component: new () => T) {
     imports: [component],
     providers: provideTestApp([{ path: 'empresas', children: [] }]),
   });
+  // Como al arrancar la aplicación: la sesión (con sus permisos) se carga antes de pintar nada.
+  await TestBed.inject(Session).load();
   const fixture = TestBed.createComponent(component);
   await settle(fixture);
   return fixture;
@@ -27,6 +30,14 @@ function type(element: HTMLElement, selector: string, value: string) {
 }
 
 describe('CompanyListPage', () => {
+  it('hides «Nueva empresa» without company:edit', async () => {
+    db.me = { ...db.me!, permissions: ['company:read'] };
+    const fixture = await render(CompanyListPage);
+    const element = fixture.nativeElement as HTMLElement;
+    expect(element.querySelectorAll('tbody tr').length).toBe(5);
+    expect(element.querySelector('a[href$="nueva"]')).toBeNull();
+  });
+
   it('lists the companies sorted by name', async () => {
     const fixture = await render(CompanyListPage);
     const rows = [...(fixture.nativeElement as HTMLElement).querySelectorAll('tbody tr')];

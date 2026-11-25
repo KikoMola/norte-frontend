@@ -14,11 +14,38 @@ import { Button } from '../../ui/button/button';
 import { Icon } from '../../ui/icon/icon';
 import { NavGroup, Sidebar } from '../../ui/sidebar/sidebar';
 import { Topbar } from '../../ui/topbar/topbar';
+import { type BusinessModule } from '../../api';
+import { type Permission } from '../auth/permissions';
 import { Session } from '../auth/session';
 import { I18n } from '../i18n/i18n';
 import { Theme } from '../theme/theme';
 
 const COLLAPSED_KEY = 'norte.sidebar.collapsed';
+
+/** Entrada del menú con lo que exige para verse: un permiso y, si es de un módulo contratable, el módulo. */
+type ShellNavItem = NavGroup['items'][number] & {
+  permission?: Permission;
+  module?: BusinessModule;
+};
+interface ShellNavGroup {
+  title?: string;
+  items: ShellNavItem[];
+}
+
+const NAV: ShellNavGroup[] = [
+  { items: [{ label: 'shell.nav.home', icon: 'lucideHouse', route: '/', exact: true }] },
+  {
+    title: 'shell.nav.groups.crm',
+    items: [
+      {
+        label: 'shell.nav.companies',
+        icon: 'lucideBuilding2',
+        route: '/empresas',
+        permission: 'company:read',
+      },
+    ],
+  },
+];
 
 /**
  * Shell de la aplicación (paso 0.28): barra lateral fija y contraíble, barra superior fija y contenido desplazable.
@@ -42,7 +69,7 @@ const COLLAPSED_KEY = 'norte.sidebar.collapsed';
       class="sticky top-0 z-20 h-dvh shrink-0 border-r border-border bg-surface max-[900px]:static max-[900px]:h-auto max-[900px]:basis-full max-[900px]:border-b max-[900px]:border-r-0 [@media(max-height:720px)]:overflow-y-auto"
     >
       <app-sidebar
-        [groups]="nav"
+        [groups]="nav()"
         [(collapsed)]="collapsed"
         [label]="'shell.nav.label' | translate"
         [homeLabel]="'shell.homeLink' | translate"
@@ -137,14 +164,19 @@ export class Shell {
     return user?.name || user?.username || '';
   });
 
-  /** Etiquetas como claves de traducción: la barra lateral las traduce y cambian con el idioma. */
-  protected readonly nav: NavGroup[] = [
-    { items: [{ label: 'shell.nav.home', icon: 'lucideHouse', route: '/', exact: true }] },
-    {
-      title: 'shell.nav.groups.crm',
-      items: [{ label: 'shell.nav.companies', icon: 'lucideBuilding2', route: '/empresas' }],
-    },
-  ];
+  /**
+   * Etiquetas como claves de traducción: la barra lateral las traduce y cambian con el idioma. Solo se ve lo que el
+   * usuario puede usar (pasos 1.2 y 1.3); los grupos que se quedan vacíos desaparecen.
+   */
+  protected readonly nav = computed<NavGroup[]>(() =>
+    NAV.map((group) => ({
+      title: group.title,
+      items: group.items
+        .filter((item) => !item.permission || this.session.can(item.permission))
+        .filter((item) => !item.module || this.session.hasModule(item.module))
+        .map(({ label, icon, route, exact }) => ({ label, icon, route, exact })),
+    })).filter((group) => group.items.length > 0),
+  );
 
   constructor() {
     effect(() => {

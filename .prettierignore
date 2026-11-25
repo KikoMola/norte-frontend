@@ -8,3 +8,5 @@ playwright-report
 test-results
 src/app/api/generated
 src/mock-public
+# Copia literal del contrato de norte-backend (npm run api:sync): no se reformatea.
+api/openapi.yaml

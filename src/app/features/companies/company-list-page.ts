@@ -11,6 +11,8 @@ import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { type Company, CompaniesService, type ListCompaniesSort } from '../../api';
+import { Can } from '../../core/auth/can';
+import { Session } from '../../core/auth/session';
 import { toProblem } from '../../core/http/http-context';
 import { I18n } from '../../core/i18n/i18n';
 import { Button } from '../../ui/button/button';
@@ -36,6 +38,7 @@ const SEARCH_DEBOUNCE_MS = 300;
   selector: 'app-company-list-page',
   imports: [
     Button,
+    Can,
     DataTable,
     DataTableCell,
     Icon,
@@ -52,7 +55,7 @@ const SEARCH_DEBOUNCE_MS = 300;
       [heading]="'companies.list.title' | translate"
       [breadcrumb]="'companies.list.breadcrumb' | translate"
     >
-      <a appButton variant="primary" routerLink="nueva">
+      <a *appCan="'company:edit'" appButton variant="primary" routerLink="nueva">
         <app-icon name="lucidePlus" />{{ 'companies.list.new' | translate }}
       </a>
     </app-page-header>
@@ -98,7 +101,7 @@ const SEARCH_DEBOUNCE_MS = 300;
           <span class="font-medium text-text">{{ company.name }}</span>
         </ng-template>
 
-        @if (!query()) {
+        @if (!query() && session.can('company:edit')) {
           <a tableEmpty appButton variant="primary" size="sm" routerLink="nueva">
             <app-icon name="lucidePlus" />{{ 'companies.list.new' | translate }}
           </a>
@@ -108,6 +111,7 @@ const SEARCH_DEBOUNCE_MS = 300;
   `,
 })
 export class CompanyListPage {
+  protected readonly session = inject(Session);
   protected readonly api = inject(CompaniesService);
   private readonly i18n = inject(I18n);
 

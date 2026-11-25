@@ -3,8 +3,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
-import { type Me, SessionService } from '../../api';
+import { type BusinessModule, type Me, SessionService } from '../../api';
 import { handles } from '../http/http-context';
+import { type Permission } from './permissions';
 
 export type SessionStatus = 'loading' | 'authenticated' | 'anonymous' | 'error';
 
@@ -29,6 +30,9 @@ export class Session {
   readonly status = computed(() => this.state().status);
   readonly user = computed(() => this.state().user);
   readonly isAuthenticated = computed(() => this.state().status === 'authenticated');
+  /** Permisos efectivos (paso 1.3) y módulos contratados (paso 1.2), tal como los da `GET /me`. */
+  readonly permissions = computed(() => new Set(this.state().user?.permissions ?? []));
+  readonly modules = computed(() => new Set<BusinessModule>(this.state().user?.modules ?? []));
   /** Iniciales para el avatar: «Ana Acme» → «AA». */
   readonly initials = computed(() => {
     const user = this.state().user;
@@ -39,6 +43,15 @@ export class Session {
       .map((part) => part[0]?.toUpperCase() ?? '')
       .join('');
   });
+
+  /** Solo sirve para ocultar lo que no se puede hacer: el backend vuelve a comprobarlo siempre. */
+  can(permission: Permission): boolean {
+    return this.permissions().has(permission);
+  }
+
+  hasModule(module: BusinessModule): boolean {
+    return this.modules().has(module);
+  }
 
   async load(): Promise<void> {
     try {

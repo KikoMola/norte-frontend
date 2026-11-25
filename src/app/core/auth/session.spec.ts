@@ -26,6 +26,23 @@ describe('Session', () => {
     expect(session.initials()).toBe('AA');
   });
 
+  it('exposes the permissions and contracted modules of GET /me', async () => {
+    db.me = { ...db.me!, permissions: ['company:read'], modules: ['invoicing'] };
+    const session = TestBed.inject(Session);
+    await session.load();
+    expect(session.can('company:read')).toBe(true);
+    expect(session.can('company:edit')).toBe(false);
+    expect(session.hasModule('invoicing')).toBe(true);
+    expect(session.hasModule('crm')).toBe(false);
+  });
+
+  it('has no permissions without a session', async () => {
+    db.me = null;
+    const session = TestBed.inject(Session);
+    await session.load();
+    expect(session.can('company:read')).toBe(false);
+  });
+
   it('is anonymous when the BFF answers 401', async () => {
     db.me = null;
     const session = TestBed.inject(Session);

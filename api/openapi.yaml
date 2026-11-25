@@ -9,6 +9,9 @@ info:
 
     El navegador no llama a esta API directamente: pasa por el BFF, que añade el access token. Por eso el esquema de
     seguridad es `bearerAuth` aunque la SPA solo use una cookie de sesión.
+  license:
+    name: Apache 2.0
+    identifier: Apache-2.0
 servers:
   - url: /api/v1
     description: A través del BFF (mismo origen que la SPA)
@@ -230,7 +233,9 @@ components:
           schema:
             $ref: '#/components/schemas/Problem'
     Forbidden:
-      description: El usuario no tiene permiso para esta acción
+      description: |
+        El usuario no tiene permiso para esta acción (`auth.forbidden`) o el tenant no tiene contratado el módulo
+        (`module.disabled`)
       content:
         application/problem+json:
           schema:
@@ -408,7 +413,7 @@ components:
 
     Me:
       type: object
-      required: [id, username, tenantId, roles]
+      required: [id, username, tenantId, roles, permissions, modules]
       properties:
         id:
           type: string
@@ -427,6 +432,27 @@ components:
           type: array
           items:
             type: string
+        permissions:
+          type: array
+          description: |
+            Permisos efectivos del usuario (`resource:action`): los de sus roles en este tenant, solo de los módulos
+            contratados, sin repetidos. El frontend oculta lo que no puede hacer; el backend lo vuelve a comprobar
+            siempre.
+          items:
+            type: string
+            pattern: '^[a-z][a-z-]*:[a-z][a-z-]*$'
+          examples: [[company:read, company:edit, invoice:issue]]
+        modules:
+          type: array
+          description: |
+            Módulos contratados por el tenant, sin repetidos. Los comunes (empresas, catálogo, ajustes) no aparecen.
+          items:
+            $ref: '#/components/schemas/BusinessModule'
+
+    BusinessModule:
+      type: string
+      description: Módulo contratable. Un endpoint de un módulo no contratado responde 403 `module.disabled`.
+      enum: [crm, sales, invoicing, inventory, purchasing, treasury, accounting, hr]
 
     CompanyCreate:
       type: object
@@ -483,6 +509,9 @@ components:
         email: ana@acme.test
         tenantId: 11111111-1111-1111-1111-111111111111
         roles: [admin, user]
+        permissions: [company:read, company:edit, product:read, product:edit, settings:read, settings:edit,
+          invoice:read, invoice:edit, invoice:issue, invoice:send, invoice:collect]
+        modules: [crm, invoicing]
     CompanyAcme:
       value:
         id: 0b6f1c3e-9a43-4d0e-8f1e-7f6a2b1c9d10
