@@ -161,6 +161,38 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedError'
 
+  /companies/{companyId}/history:
+    parameters:
+      - $ref: '#/components/parameters/CompanyId'
+    get:
+      tags: [companies]
+      operationId: listCompanyHistory
+      summary: Historial de cambios de una empresa
+      description: Del cambio más reciente al más antiguo. Exige el permiso `company:read`.
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Página del historial
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditEventPage'
+              examples:
+                renamed:
+                  $ref: '#/components/examples/CompanyHistory'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+
 components:
   securitySchemes:
     bearerAuth:
@@ -380,12 +412,15 @@ components:
 
     AuditEvent:
       type: object
-      description: Cambio registrado en el historial de un recurso.
-      required: [id, occurredAt, action, actor]
+      description: |
+        Cambio registrado en el historial de un recurso (paso 1.4). `changes` lista los campos que cambiaron, con los
+        nombres del recurso; va vacío en las altas y las bajas.
+      required: [id, occurredAt, action, changes]
       properties:
         id:
           type: string
-          format: uuid
+          description: Identificador de la revisión. Opaco para el cliente.
+          maxLength: 32
         occurredAt:
           type: string
           format: date-time
@@ -394,22 +429,41 @@ components:
           enum: [created, updated, deleted]
         actor:
           type: object
-          required: [id]
+          description: Usuario que hizo el cambio. Falta si lo hizo un proceso del sistema.
+          required: [id, name]
           properties:
             id:
               type: string
+              description: Identificador del usuario en Keycloak (`sub`).
             name:
               type: string
         changes:
           type: array
           items:
             type: object
-            required: [field]
+            required: [field, from, to]
             properties:
               field:
                 type: string
-              from: {}
-              to: {}
+                description: Campo del recurso, como en su esquema (`taxId`).
+                examples: [name]
+              from:
+                type: [string, 'null']
+                description: Valor anterior; `null` si no tenía.
+              to:
+                type: [string, 'null']
+                description: Valor nuevo; `null` si se quitó.
+
+    AuditEventPage:
+      type: object
+      required: [items, pageInfo]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEvent'
+        pageInfo:
+          $ref: '#/components/schemas/PageInfo'
 
     Me:
       type: object
@@ -532,6 +586,30 @@ components:
             taxId: A58818501
             createdAt: '2026-11-23T16:05:00Z'
             updatedAt: '2026-11-23T16:05:00Z'
+        pageInfo:
+          nextCursor: null
+          hasNext: false
+    CompanyHistory:
+      summary: Alta y cambio de razón social
+      value:
+        items:
+          - id: '42'
+            occurredAt: '2026-11-25T10:21:00Z'
+            action: updated
+            actor:
+              id: 7c1f6a52-0d6b-4a8e-9d1e-2f3b4c5d6e7f
+              name: Ana García
+            changes:
+              - field: name
+                from: Acme S.L.
+                to: Acme Ibérica S.L.
+          - id: '17'
+            occurredAt: '2026-11-24T09:30:00Z'
+            action: created
+            actor:
+              id: 7c1f6a52-0d6b-4a8e-9d1e-2f3b4c5d6e7f
+              name: Ana García
+            changes: []
         pageInfo:
           nextCursor: null
           hasNext: false

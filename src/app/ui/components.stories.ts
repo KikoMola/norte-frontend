@@ -4,6 +4,7 @@ import { moduleMetadata } from '@storybook/angular';
 
 import { Button } from './button/button';
 import { Field } from './field/field';
+import { History } from './history/history';
 import { ICON_NAMES, Icon } from './icon/icon';
 import { Input } from './input/input';
 import { PageHeader } from './page-header/page-header';
@@ -15,7 +16,17 @@ const meta: Meta = {
   title: 'Componentes',
   decorators: [
     moduleMetadata({
-      imports: [Button, Field, Icon, Input, PageHeader, Panel, ReactiveFormsModule, Search],
+      imports: [
+        Button,
+        Field,
+        History,
+        Icon,
+        Input,
+        PageHeader,
+        Panel,
+        ReactiveFormsModule,
+        Search,
+      ],
     }),
   ],
 };
@@ -104,6 +115,45 @@ export const PanelYCabecera: Story = {
             <button appButton variant="primary">Guardar</button>
           </div>
         </app-panel>
+      </div>`,
+  }),
+};
+
+/** Historial de cambios (paso 1.4), como en la ficha de empresa del lienzo. */
+export const Historial: Story = {
+  render: () => ({
+    props: {
+      events: [
+        {
+          id: '3',
+          occurredAt: '2026-11-24T17:05:00Z',
+          action: 'updated',
+          actor: 'Marta López',
+          changes: [
+            { label: 'la razón social', from: 'Cerámicas Turia', to: 'Cerámicas del Turia S.L.' },
+          ],
+        },
+        {
+          id: '2',
+          occurredAt: '2026-11-12T09:21:00Z',
+          action: 'updated',
+          changes: [{ label: 'el NIF', from: null, to: 'B46218734' }],
+        },
+        {
+          id: '1',
+          occurredAt: '2024-03-03T08:47:00Z',
+          action: 'created',
+          actor: 'Javier Ruiz',
+          changes: [],
+        },
+      ],
+    },
+    template: `
+      <div class="grid max-w-[880px] grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-6">
+        <app-panel heading="Historial"><app-history [events]="events" subject="la empresa" hasMore /></app-panel>
+        <app-panel heading="Cargando"><app-history status="loading" /></app-panel>
+        <app-panel heading="Sin cambios"><app-history /></app-panel>
+        <app-panel heading="Error"><app-history status="error" /></app-panel>
       </div>`,
   }),
 };

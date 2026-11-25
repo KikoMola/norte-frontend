@@ -12,6 +12,7 @@ import {
   DataTableStatus,
 } from './data-table/data-table';
 import { Field } from './field/field';
+import { History, HistoryEvent, HistoryStatus } from './history/history';
 import { Input } from './input/input';
 import { Sidebar } from './sidebar/sidebar';
 import { Toaster, Toasts } from './toast/toast';
@@ -220,5 +221,89 @@ describe('Sidebar', () => {
     const label = (fixture.nativeElement as HTMLElement).querySelector('a.nav-item span')!;
     expect(label.classList).toContain('sr-only');
     expect(label.textContent).toContain('Inicio');
+  });
+});
+
+describe('History', () => {
+  const events: HistoryEvent[] = [
+    {
+      id: '3',
+      occurredAt: '2026-11-25T10:21:00Z',
+      action: 'updated',
+      actor: 'Ana García',
+      changes: [
+        { label: 'la razón social', from: 'Acme S.L.', to: 'Acme Ibérica S.L.' },
+        { label: 'el país', from: null, to: 'ES' },
+      ],
+    },
+    { id: '1', occurredAt: '2026-11-24T09:30:00Z', action: 'created', changes: [] },
+  ];
+
+  @Component({
+    imports: [History],
+    template: `<app-history
+      [events]="events()"
+      [status]="status()"
+      [hasMore]="hasMore()"
+      subject="la empresa"
+      (more)="more = more + 1"
+    />`,
+  })
+  class Host {
+    readonly events = signal<HistoryEvent[]>(events);
+    readonly status = signal<HistoryStatus>('ready');
+    readonly hasMore = signal(false);
+    more = 0;
+  }
+
+  it('describes each change with who made it and strikes the old value', async () => {
+    const fixture = await render(Host);
+    const items = (fixture.nativeElement as HTMLElement).querySelectorAll('li');
+
+    expect(items).toHaveLength(2);
+    expect(items[0].textContent?.replace(/\s+/g, ' ')).toContain(
+      'Ana García cambió la razón social de Acme S.L. a Acme Ibérica S.L. y cambió el país de (vacío) a ES',
+    );
+    expect(items[0].querySelector('del')?.textContent).toBe('Acme S.L.');
+    expect(items[0].querySelector('time')?.getAttribute('datetime')).toBe('2026-11-25T10:21:00Z');
+    // Sin autor, el cambio lo hizo el sistema.
+    expect(items[1].textContent?.replace(/\s+/g, ' ')).toContain('El sistema creó la empresa');
+  });
+
+  it('shows loading, empty and error states', async () => {
+    const fixture = await render(Host);
+    const element = fixture.nativeElement as HTMLElement;
+    fixture.componentInstance.events.set([]);
+    fixture.componentInstance.status.set('loading');
+    await fixture.whenStable();
+    expect(element.querySelector('[aria-busy="true"]')).not.toBeNull();
+
+    fixture.componentInstance.status.set('error');
+    await fixture.whenStable();
+    expect(element.querySelector('[role="alert"]')?.textContent).toContain(
+      'No se ha podido cargar el historial',
+    );
+
+    fixture.componentInstance.status.set('ready');
+    await fixture.whenStable();
+    expect(element.textContent).toContain('Todavía no hay cambios registrados');
+  });
+
+  it('asks for more while keeping what it already shows', async () => {
+    const fixture = await render(Host);
+    const element = fixture.nativeElement as HTMLElement;
+    fixture.componentInstance.hasMore.set(true);
+    await fixture.whenStable();
+
+    const more = [...element.querySelectorAll('button')].find((b) =>
+      b.textContent?.includes('Ver más'),
+    )!;
+    more.click();
+    expect(fixture.componentInstance.more).toBe(1);
+
+    fixture.componentInstance.status.set('loading');
+    await fixture.whenStable();
+    expect(element.querySelectorAll('li')).toHaveLength(2);
+    expect(more.getAttribute('aria-busy')).toBe('true');
   });
 });

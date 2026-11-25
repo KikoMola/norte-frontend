@@ -67,7 +67,21 @@
     "field": {
       "required": "obligatorio"
     },
-    "trace": "Traza {{traceId}}"
+    "trace": "Traza {{traceId}}",
+    "history": {
+      "loading": "Cargando el historial",
+      "empty": "Todavía no hay cambios registrados.",
+      "error": "No se ha podido cargar el historial.",
+      "more": "Ver más",
+      "system": "El sistema",
+      "created": "creó {{subject}}",
+      "deleted": "borró {{subject}}",
+      "changed": "cambió {{field}}",
+      "from": "de",
+      "to": "a",
+      "and": "y",
+      "blank": "(vacío)"
+    }
   },
   "errors": {
     "generic": "Algo ha salido mal. Vuelve a intentarlo.",

@@ -67,7 +67,21 @@
     "field": {
       "required": "required"
     },
-    "trace": "Trace {{traceId}}"
+    "trace": "Trace {{traceId}}",
+    "history": {
+      "loading": "Loading history",
+      "empty": "No changes recorded yet.",
+      "error": "The history could not be loaded.",
+      "more": "Show more",
+      "system": "The system",
+      "created": "created {{subject}}",
+      "deleted": "deleted {{subject}}",
+      "changed": "changed {{field}}",
+      "from": "from",
+      "to": "to",
+      "and": "and",
+      "blank": "(empty)"
+    }
   },
   "errors": {
     "generic": "Something went wrong. Please try again.",
